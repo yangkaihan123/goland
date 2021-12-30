@@ -12,18 +12,18 @@ import 下划线（如：import hello/imp）的作用：当导入一个包时，
     |
     +--- main.go            
     |
-    +--- hello
+    +--- study_source
            |
-            +--- hello.go
+            +--- study_source.go
 ```
 ```go
 package main
 
-import _"./hello"
+import _"./study_source"
 
 func main()  {
-    //hello.Print()
-	//编译报错： ./main.go:6.5: undefined: hello
+    //study_source.Print()
+	//编译报错： ./main.go:6.5: undefined: study_source
 }
 ```
 hello.go  
@@ -36,7 +36,7 @@ func init()  {
     fmt.Println("imp-init() come here.")
 }
 func Print() {
-    fmt.Println("hello!")
+    fmt.Println("study_source!")
 }
 ```
 输出结果：  
