@@ -3,7 +3,7 @@ Map与工厂模式
 1.map的value可以是一个方法
 2.与Go的Dock type接口方式一起，可以方便的实现单一方法对象的工厂模式  
 **实现set**  
-Go的内置集合中没有set实现，可以通过map[type]bool  
+Go的内置集合中没有set实现，可以通过map [type] bool  
 1.元素的唯一性  
 2.基本操作：  
 添加元素   
