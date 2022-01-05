@@ -1,4 +1,5 @@
 **循环**  
+-
 Go仅支持循环关键字for  
 ```go
 //while 条件循环
@@ -17,7 +18,7 @@ for {
 	...
 }
 ```   
-**条件语句**
+###**条件语句**
 ```go
 if condition {
 	// code of be executed if condition is true 

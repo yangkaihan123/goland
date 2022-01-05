@@ -1,4 +1,6 @@
 **可变参数和defer**   
+-
+###可变参数
 ```go
 func sum(ops ...int) int {
 	s := 0
@@ -8,9 +10,9 @@ func sum(ops ...int) int {
 	return s
 }
 ```   
-可变参数   
+  
 
-defer函数   
+###defer函数   
 ```go
 func TestDefer(t *testing.T) {
 	defer func() {

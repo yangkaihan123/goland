@@ -1,4 +1,5 @@
 **iota**
+-
 iota 是go语言中的常量计数器，只能在常量的表达式中使用  
 iota 在const 关键字出现时将被重置为0  
 const 中每新增一行常量声明，iota 计数一次（iota 可以理解为const 语句块中的行索引）  
