@@ -1,4 +1,4 @@
-package string_and_strconv
+package string_conversion
 
 import (
 	"strings"
@@ -63,14 +63,4 @@ func TestTrim(t *testing.T) {
 	var ex2 = "  asds  "
 	t.Logf("the ex2 is %s,", ex2)
 	t.Logf("cut space is %s,", strings.TrimSpace(ex2))
-}
-
-func TestFieldsAndSplit(t *testing.T) {
-	var a = "abcd"
-	t.Logf("the ex is %s", a)
-	t.Logf("use space is %s", strings.Fields(a))
-	t.Logf("use myself is %s ", strings.Split(a, ","))
-	var b = "   "
-	t.Logf("space str is %s", b)
-	t.Logf("len is 0 : %s", strings.Fields(b))
 }
