@@ -1,4 +1,4 @@
-package f_test
+package error_test
 
 import (
 	"runtime"
