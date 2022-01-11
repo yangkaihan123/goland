@@ -24,3 +24,13 @@ func TestBreak2(t *testing.T) {
 		t.Log(" ")
 	}
 }
+
+func TestContinue(t *testing.T) {
+	for i := 0; i < 10; i++ {
+		if i == 5 {
+			continue //忽略剩余的循环体直接进入下次循环过程，但是不是无条件执行下一次循环，执行前依旧遵循循环的判断条件
+		} //continue只能用于for循环中
+		t.Log(i)
+		t.Log(" ")
+	}
+}
