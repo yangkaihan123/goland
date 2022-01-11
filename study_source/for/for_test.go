@@ -1,4 +1,4 @@
-package for_test
+package for2_test
 
 import "testing"
 
