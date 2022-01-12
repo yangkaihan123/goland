@@ -22,4 +22,68 @@
     没有参数的函数通常被称为niladic函数，类似的 main.main()
 
 ###按值传递（call by value）和按引用传递（call by reference）
+    Go默认使用按值传递来传参，也就是传递参数的副本（副本）
+    函数接收参数副本以后，在使用变量的过程中可能对副本的值进行更改，但是不会影响原值
+    比如: Function(arg1)
+    如果想让函数直接修改参数值，而不是对参数的副本进行操作，需要将参数地址（其实就是指针了，变量名前加&）传递给函数，这样就是按引用传递
+    比如：Function(&arg1)，此时传递给函数的是一个指针
+    如果传递给函数的是一个指针，指针的值（一个地址）会被复制，但是指针上的值所指向的地址上的值不会被复制（就是源值）
+    可以通过修改指针的值来修改指向这个值所指向的地址上的值
+    （指针也是变量类型，有自己的地址和值，通常指针的值指向一个变量的地址，所以按引用传递的本质也是按值传递）
+    因为传递指针的消耗比传递副本会少，所以在函数调用时，像切片（slice）字典（map）接口（interface）通道（channel）
+    这样的引用类型都是默认使用引用传递（即使没有显式的指出指针）。
+    有些函数只是完成一个任务，并没有返回值，仅仅为了利用这个函数的作用来打印文本，发送邮件，记录panic等一些函数，但是绝大部分函数都是有明确返回值的
+
+    在example：func02_test.go中
+    MultiPly3Nums函数带有三个形参，分别是a,b,c 还有一个int类型的返回值
+    func TestFunc02(t *testing.T) {
+	t.Logf("Multiply 2 * 5 * 6 = %d\n", MultiPly3Nums(2, 5, 6))
+    }
+    func MultiPly3Nums(a int, b int, c int) int {
+        return a * b *c
+    }
+    
+    当函数需要多返回值，四个到五个，可以传递一个切片给函数，前提是返回值具有相同类型，当返回值有不同类型时候，可以传递一个结构体
+    Q：下面两个函数调用的区别：
+    （A）func DoSomething(a *A) {
+            b = a
+        }
+
+    （B）func DoSomething(a A) {
+            b = &a
+        }
+    一个是值传递一个是引用传递
+
+###命名的返回值（named return variables)
+   
+    var (
+	num   int = 10
+	numx2 int
+	numx3 int
+    )
+    func TestFunctionReturn(t *testing.T) {
+        numx2, numx3 = getX2AndX3(num)
+        PrintValues()
+        numx2, numx3 = getx2andx32(num)
+        PrintValues()
+    }
+    func getx2andx32(input int) (x2 int, x3 int) {
+        x2 = 2 * input
+        x3 = 3 * input
+        return
+    }
+    func PrintValues() {
+        fmt.Printf("num = %d, 2x num = %d, 3x num = %d\n", num, numx2, numx3)
+    }
+    func getX2AndX3(input int) (int, int) {
+        return 2 * input, 3 * input
+    }
+    这个例程中，getx2andx32和getX2AndX3都是带有一个int参数，返回两个int值
+    其中一个函数的返回值在函数调用时就已经被赋予了一个初始零值
+    getX2AndX3 与 getX2AndX3_2 两个函数演示了如何使用非命名返回值与命名返回值的特性。
+    当需要返回多个非命名返回值时，需要使用 () 把它们括起来，比如 (int, int)
+    命名返回值作为结果形参（result parameters）被初始化为相应类型的零值，当需要返回的时候，只需要一条简单的不带参数的 return 语句。
+    需要注意的是，即使只有一个命名返回值，也需要使用 () 括起来，PrintValues()
+
+    
     
