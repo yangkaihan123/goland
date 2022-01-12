@@ -85,5 +85,9 @@
     命名返回值作为结果形参（result parameters）被初始化为相应类型的零值，当需要返回的时候，只需要一条简单的不带参数的 return 语句。
     需要注意的是，即使只有一个命名返回值，也需要使用 () 括起来，PrintValues()
 
+    警告：
+        。return 或 return var都是可以的
+        。但是return var = expression（表达式）会引发一个编译错误
+
     
     
