@@ -32,3 +32,32 @@
             return min
         }
     例程中：a在TestCanChange中作为min的返回值，传入的参数为b（一个切片），就需要用 b... 来传参
+
+    变长参数可以作为对应类型的切片slice进行二次传递
+    当变长参数的类型不是都相同的时候有两种方式：
+    （1）使用结构体：
+        type Options struct {
+            par1 type1,
+            par2 type2,
+            ...
+        }
+        定义一个结构类型为Options，用来存储所有可能的参数
+        函数F1可以正常使用参数a和b，以及一个没有任何初始化的Options结构：
+        F1(a, b, Options {})
+        如果需要对选项进行初始化，可以使用：
+        F1(a, b, Options {par1:var1, par2:var2})
+    （2）如果一个变长参数的类型没有被指定，可以使用默认的空接口（interface）可以接受任何类型的参数
+        这个方式不仅可以用于未知长度的参数，还可以用于任何不确定类型的参数。一般会使用一个for-range循环，或者switch
+        对每个参数的类型进行判断。
+        ex:
+            for typecheck(..,..,values ... interface{}) {
+                for _, value := range values {
+                    switch v := values.(type) {
+                        case int: ...
+                        case float: ...
+                        case string: ...
+                        case bool: ...
+                        default: ...
+                    }
+                }
+            }
