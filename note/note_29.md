@@ -92,3 +92,62 @@
     即使函数使用了命名返回值，你依旧可以无视它而返回明确的值。
     任何一个非命名返回值（使用非命名返回值是很糟的编程习惯）在 return 语句里面都要明确指出包含返回值的变量或是一个可计算的值（就像上面警告所指出的那样）
     尽量使用命名返回值：会使代码更清晰、更简短，同时更加容易读懂
+
+###空白符
+    
+    空白符来匹配一些不需要的值，然后丢弃掉
+    ex:
+        func TestBlank(t *testing.T) {
+	        var (
+		        i1 int
+		        f1 float32
+	        )
+	        i1, _, f1 = ThreeValues()
+	        t.Logf("the int is %d, the float is %f \n", i1, f1)
+        }
+        func ThreeValues() (int, int, float32) {
+            return 5, 6, 7.5
+        }
+    例程中，ThreeValues 是一个有三个返回值不需要任何参数的函数，TestBlank中，将第一个和第三个返回值赋值给了i1，f1，第二个返回值赋值给了_，程序自动丢弃
+    
+    ex2:
+        func TestReturnBlank(t *testing.T) {
+	        var (
+		        min int
+	        )
+	        min, _ = MinMax(78, 65)
+	        t.Logf("Minmub is %d, Maxmub is _", min)
+        }
+        func MinMax(i int, i2 int) (min int, max int) {
+            if i < i2 {
+                min = i
+                max = i2
+            } else {
+                min = i2
+                max = i
+            }
+            return min, max
+        }
+    比较两数大小，只输出最小值
+
+###改变外部变量（outside variable)
+
+    传递指针给函数不但可以节省内存（因为是没有赋值变量的值），而且赋予了函数直接修改外部变量的能力
+    所以被修改的变量不再需要使用return返回。
+    ex:
+        func TestOutsideValue(t *testing.T) {
+	        n := 0
+	        reply := &n //n的指针地址
+	        t.Log("the n's pointer is : ", reply)
+	        Multiply(10, 5, reply)
+	        t.Log("reply is ", *reply)
+	        t.Log("the *reply is ", &*reply)
+        }
+        func Multiply(a, b int, reply *int) {
+            *reply = a * b
+        }
+    例程中：reply是一个指向int变量的指针，通过这个指针可以修改函数内这个int变量的值
+    
+    注意：这仅仅是个指导性的例子，当需要在函数内改变一个占用内存比较大的变量时，性能优势就更加明显了。
+    然而，如果不小心使用的话，传递一个指针很容易引发一些不确定的事，
+    所以，我们要十分小心那些可以改变外部变量的函数，在必要时，需要添加注释以便其他人能够更加清楚的知道函数里面到底发生了什么。
