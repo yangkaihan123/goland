@@ -84,5 +84,29 @@
         fmt.Printf("%d\n", i)
     }
 
+    练习3：实现一个输出前30个整数的阶乘的程序
+    n! 阶乘的定义：n! = n * (n-1)!, 0! = 1
+    func Factorial(n uint64) (fac uint64) {
+	    fac = 1
+	    if n > 0 {
+		    fac = n * Factorial(n-1)
+		    return
+	    }
+	    return
+    }
+    func TestFactorial(t *testing.T) {
+        for i := uint64(0); i < uint64(30); i++ {
+        t.Logf("Factorial of %d is %d\n", i, Factorial(i))
+        }
+    }
     
-    
+    /* unnamed return variables: 返回未命名返回值
+    func Factorial_02(n uint64) uint64 {
+        if n > 0 {
+        return n * Factorial(n-1)
+        }
+        return 1
+    }
+    */
+    特别注意的是，使用 int 类型最多只能计算到 12 的阶乘，因为一般情况下 int 类型的大小为 32 位，继续计算会导致溢出错误
+    最好的解决方案是使用big包
