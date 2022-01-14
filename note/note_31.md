@@ -55,4 +55,95 @@ defer和追踪
         defer disconnectFromDB()
     
     例程模拟了这四种情况：
-    
+    func TestDefer4(t *testing.T) {
+	    doDBOperations()
+    }
+
+    func doDBOperations() {
+        connectToDB()
+        fmt.Println("Defering the database disconnect.")
+        defer disconnectFromDB() //function called here with defer
+        fmt.Println("Doing some DB operations ...")
+        fmt.Println("Oops! some crash or network error ...")
+        fmt.Println("Returning form function here!")
+        return
+        //terminate the program
+        //deferred function executed here just before actually returning, even if
+        //there is a return or abnormal termination before
+    }
+    func disconnectFromDB() {
+        fmt.Println("ok, the database is disconnected")
+    }
+    func connectToDB() {
+        fmt.Println("ok, the database is connected")
+    }
+###defer实现代码追踪
+    一个基础但是十分实用的实现代码执行追踪的方案，就是在进入和离开某个函数打印相关信息，即可以提炼为下面两个函数：
+    func trace(s string) {
+        fmt.Println("entering:",s)
+    }
+    func untrace(s string) {
+        fmt.Println("leaving:",s)
+    }
+    例程展示了合适的调用这两个函数：
+    func trace(s string) {
+	    fmt.Println("entering:", s)
+    }
+    func untrace(s string) {
+        fmt.Println("leaving:", s)
+    }
+    func a() {
+        trace("a")
+        defer untrace("a")
+        fmt.Println("in a")
+    }
+    func b() {
+        trace("b")
+        defer untrace("b")
+        fmt.Println("in b")
+        a()
+    }
+    func TestTrace(t *testing.T) {
+        b()
+    }
+    例程的输出结果为：
+    entering: b
+    in b
+    entering: a
+    in a
+    leaving: a
+    leaving: b
+
+    更简洁的写法：
+    func trace_new(s string) string {
+        fmt.Println("entering:", s)
+        return s
+    }
+    func un(s string) {
+        fmt.Println("leaving:", s)
+    }
+    func a() {
+        defer un(trace_new("a"))
+        fmt.Println("in a")
+    }
+    func b() {
+        defer un(trace_new("b"))
+        fmt.Println("in b")
+        a()
+    }
+    func TestDefertrace(t *testing.T) {
+        b()
+    }
+
+###使用defer来记录函数的参数和返回值
+    例程展示了在调试时使用defer的手法：
+    func func1(s string) (n int, err error) {
+        defer func() {
+            log.Printf("fun1(%q) = %d, %v",s,n,err)
+        }()
+        return 7,io.EOF
+    }
+    func TestDeferLogValues(t *testing.T)  {
+        func1("Go")
+    }
+    例程输出为：2022/01/14 10:17:03 fun1("Go") = 7, EOF
