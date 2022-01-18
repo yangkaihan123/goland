@@ -79,4 +79,65 @@
     会产生一次数组拷贝，func1方法不会修改原始数组arr2
     如果想修改源数组，那么arr2必须通过 & 以引用的方式传过来，func1(&arr2)
     
-    
+    练习1：证明当数组赋值时，发生了数组内存拷贝  
+    func TestArrayPointer(t *testing.T) {
+	    var arr1 [5]int
+
+	    for i := 0; i < len(arr1); i++ {
+		    arr1[1] = i * 2
+	    }
+	    arr2 := arr1
+	    arr2[2] = 100
+
+	    for i := 0; i < len(arr2); i++ {
+		    t.Logf("Array arr1 at index %d is %d\n", i, arr1[i])
+	    }
+	    t.Log()
+	    for i := 0; i < len(arr2); i++ {
+		    t.Logf("Array arr2 at index %d is %d\n", i, arr2[i])
+	    }
+    }
+    输出结果：
+    === RUN   TestArrayPointer
+    array_value_test.go:15: Array arr1 at index 0 is 0
+    array_value_test.go:15: Array arr1 at index 1 is 8
+    array_value_test.go:15: Array arr1 at index 2 is 0
+    array_value_test.go:15: Array arr1 at index 3 is 0
+    array_value_test.go:15: Array arr1 at index 4 is 0
+    array_value_test.go:17: 
+    array_value_test.go:19: Array arr2 at index 0 is 0
+    array_value_test.go:19: Array arr2 at index 1 is 8
+    array_value_test.go:19: Array arr2 at index 2 is 100
+    array_value_test.go:19: Array arr2 at index 3 is 0
+    array_value_test.go:19: Array arr2 at index 4 is 0
+    --- PASS: TestArrayPointer (0.00s)
+    PASS
+    证明了数组赋值，是修改了数组的指针，arr1的值未改
+
+    练习2：写一个循环并用下标给数组赋值（从0到15）并且将数组打印在屏幕
+    func TestForArray_02(t *testing.T) {
+	    var a [15]int
+	    for i := 0; i < len(a); i++ {
+		    a[i] = i
+	    }
+	    t.Log(a)
+    }
+    输出：
+    === RUN   TestForArray_02
+    for_array_02_test.go:10: [0 1 2 3 4 5 6 7 8 9 10 11 12 13 14]
+    --- PASS: TestForArray_02 (0.00s)
+    PASS
+
+    练习3：使用数组计算斐波那契数列，并打印前50个Fibonacci数字
+    var fibs [50]int64
+    func TestFibonacciArray(t *testing.T) {
+	    fibs[0] = 1
+	    fibs[1] = 1
+	    for i := 2; i < 50; i++ {
+		    fibs[i] = fibs[i-1] + fibs[i-2]
+	    }
+	    for i := 0; i < 50; i++ {
+		    t.Logf("The %d-th Fibonacci number is %d\n", i, fibs[i])
+	    }
+    }
+    这种方式很快，为什么
