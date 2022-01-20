@@ -140,4 +140,128 @@
 		    t.Logf("The %d-th Fibonacci number is %d\n", i, fibs[i])
 	    }
     }
-    这种方式很快，为什么
+    
+
+###数组常量
+    如果当创建数组时，数组值已经提前知道，就可以用数组常量的方式来初始化数组，不用依次使用 []= 的方式（所有组成的元素都有相同的常量语法）
+    ex:
+        func main() {
+            //var arrAge = [5]int{18,20,15,22,16}
+            //var arrLazy = [...]int{5,6,7,8,22}
+            //var arrLazy = []int{5,6,7,8,22}
+            var arrKeyValue = [5]string{3:"Chris",4:"Ron"}
+            //var arrKeyValue = []string{3:"Chris",4:"Ron"}
+
+            for i := 0; i < len(arrKeyValue); i++ {
+                fmt.Printf("Person at %d is %s\n", i, arrKeyValue[i])
+            }
+        }
+    
+    第一种变化：
+    var arrAge = [5]int{18,20,15,22,16}
+    注意[5]int可以从左边起开始忽略：[10]int{1,2,3} 这个有十个元素的数组，除了前三个元素外其他元素都为0
+    
+    第二种变化：
+    var arrLazy = [...]int{5,6,7,8,22}
+    ... 同样可以忽略，从本质上它们其实变化成了切片
+    
+    第三种变化：
+    var arrKeyValue = [5]string{3: "Chris", 4: "Ron"}
+    只有索引 3 和 4 被赋予实际的值，其他元素都被设置为空的字符串，所以输出结果为：
+    Person at 0 is
+    Person at 1 is
+    Person at 2 is
+    Person at 3 is Chris   
+    Person at 4 is Ron
+
+    在这里数组长度同样可以写成 ... 或者直接忽略
+    
+    可以取任意数组常量的地址来作为指向新实例的指针：
+    func TestPointerArray2(t *testing.T) {
+	    for i := 0; i < 3; i++ {
+		    fp(&[3]int{i, i * i, i * i * i})
+	    }
+    }
+    func fp(a *[3]int) {
+        fmt.Println(a)
+    }   
+    output:
+    &[0 0 0]
+    &[1 1 1]
+    &[2 4 8]
+    
+    几何点（或者说数学向量）是一个使用数组的经典例子，通常使用一个别名类型
+    type Vector3D [3]float32
+    var vec Vector3D
+
+###多维数组
+    数组通常是一维的，但是可以用来组装成多维数组：
+    ex:
+    [3][5]int , [2][2][2]float64
+    
+    内部数组总是长度相同，Go语言的多维数组是矩形式的，唯一的例外是切片的数组
+    ex:
+    const (
+	    WIDTH  = 10
+	    HEIGHT = 5
+    )
+
+    type pixel int
+
+    var screen [WIDTH][HEIGHT]pixel
+    
+    func TestMultidim_array(t *testing.T) {
+        for y := 0; y < HEIGHT; y++ {
+            for x := 0; x < WIDTH; x++ {
+                screen[x][y] = 0
+            }
+        }
+        t.Log(screen)
+    }
+    output:
+    === RUN   TestMultidim_array
+    multidim_array_test.go:22: [[0 0 0 0 0] [0 0 0 0 0] [0 0 0 0 0] [0 0 0 0 0] [0 0 0 0 0] [0 0 0 0 0] [0 0 0 0 0] [0 0 0 0 0] [0 0 0 0 0] [0 0 0 0 0]]
+    --- PASS: TestMultidim_array (0.00s)
+    PASS
+
+###将数组传递给函数
+    把一个大数组传递给函数会消耗很多内存，有两种方式：
+        。传递数组的指针
+        。使用数组的切片
+    
+    指针的方式：
+    func TestArraysum(t *testing.T) {
+	    array := [3]float64{7.0, 8.5, 9.1}
+	    x := Sum(&array) // note the explicit address-of operator
+	    //to pass a pointer to the array
+	    t.Logf("the sum of the array is %f,", x)
+    }
+
+    func Sum(a *[3]float64) (sum float64) {
+        for _, v := range *a {
+            //derefencing *a to get back to the array is not necessary!
+            sum += v
+        }
+        return
+    }
+    这在go中不常用，多用slice
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

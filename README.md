@@ -9,5 +9,3 @@ Programming learning is complex, to unremitting efforts, if a book can not under
 I believe in myself, I will learn go language. Come on!!
 
 
-
-2022.01.19 今天去研究了下client-go 
