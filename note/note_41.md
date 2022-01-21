@@ -105,9 +105,99 @@ make 的使用方式是：func make([]T, len, cap) 其中cap是可选参数
 所以下面两种方式都可以生成切片：      
 make([]int, 50, 100)  
 new([100]int)[0:50]  
-下图是make方法生成的切片的内存结构：![](pic/note_41/make_slice.png?raw=true)
+下图是make方法生成的切片的内存结构：![](pic/note_41/make_slice.png?raw=true)    
+例程：[make_slice_test.go](study_source/slice/make_slice_test.go)
+```go
+package slice
 
+import "testing"
 
+func TestMakeSlice(t *testing.T) {
+	var slice1 []int = make([]int, 10)
+	//load the array/slice
+	for i := 0; i < len(slice1); i++ {
+		slice1[i] = 5 * i
+	}
+	//print the slice:
+	for i := 0; i < len(slice1); i++ {
+		t.Logf("Slice at %d is %d\n", i, slice1[i])
+	}
+	t.Logf("\nThe length of slice1 is %d\n", len(slice1))
+	t.Logf("The capacity of slice1 is %d\n", cap(slice1))
+}
+```  
+输出：
+
+    === RUN   TestMakeSlice
+    make_slice_test.go:13: Slice at 0 is 0
+    make_slice_test.go:13: Slice at 1 is 5
+    make_slice_test.go:13: Slice at 2 is 10
+    make_slice_test.go:13: Slice at 3 is 15
+    make_slice_test.go:13: Slice at 4 is 20
+    make_slice_test.go:13: Slice at 5 is 25
+    make_slice_test.go:13: Slice at 6 is 30
+    make_slice_test.go:13: Slice at 7 is 35
+    make_slice_test.go:13: Slice at 8 is 40
+    make_slice_test.go:13: Slice at 9 is 45
+    make_slice_test.go:15:
+    The length of slice1 is 10
+    make_slice_test.go:16: The capacity of slice1 is 10
+    --- PASS: TestMakeSlice (0.00s)
+    PASS
+
+因为字符串是纯粹不可变的字节数组，它们也可以被切分为切片  
+
+练习：主函数调用一个使用序列个数作为参数的函数，该函数返回一个大小为序列个数的 Fibonacci 切片  
+[fibonacci_funcarray_test.go](study_source/slice/fibonacci_funcarray_test.go)  
+
+###new()和make()的区别  
+
+两者都是在堆上分配内存，但是它们行为不同，适用于不同的类型   
+
+- new(T) 为每一个新的类型 T 分配一片内存，初始化为 0 并且返回类型为 \*T 的内存地址： 这种方法 **返回一个指向类型T，值为 0 的地址的指针**，它适用于值类型：如数组和结构体，相当于`&T{}`。
+- make(T) **返回一个类型为 T 的初始值**, 只适用于三种内建的引用类型：slice , map , channel   
+
+new函数分配内存，make函数初始化 下图给出了区别：  
+![](pic/note_41/make_new.png?raw=true)  
+
+在上图中：  
+第一个图中   
+```go
+var p *[]int = new([]int) // *p == nil; with len and cap 0
+p := new([]int)
+```  
+
+在第二个图中， `p := make([]int, 0)`，切片 已经被初始化，但是指向一个空数组。   
+这两种方式实用性不高，下面的方法：  
+```go
+var v []int = make([]int, 10, 50)
+```  
+或者  
+```go
+v := make([]int, 10, 50)
+```   
+这样分配有一个50个 int 值的数组，并且创建了一个长度为10，容量为 50 的切片v，该切片指向数组的前10个元素。  
+**练习** ： 给定 s := make([]byte, 5)，len (s) 和 cap (s) 分别是多少？s = s[2:4]，len (s) 和 cap (s) 又分别是多少？  
+例程：[make_slice02_test.go](study_source/slice/make_slice02_test.go)   
+**练习2** 假设 s1 := []byte{'p', 'o', 'e', 'm'} 且 s2 := s1[2:]，s2 的值是多少？如果我们执行 s2[1] = 't'，s1 和 s2 现在的值又分别是多少？   
+例程：[practice_slice_test.go](study_source/slice/practice_slice_test.go)  
+
+###多维切片
+
+和数组一样，切片通常也是一维的，但是也可以由一维组合成高维。   
+通过分片的分片（或者切片的数组），长度可以任意动态变化，所以Go语言的多维切片可以任意切分。而且，内层的切片必须单独分配（通过make)。    
+
+###bytes包
+
+类型 `[]byte` 的切片很常见，Go中有一个 bytes 包专门用来解决这种类型的操作。    
+包bytes和strings包很类似，而且它还包含了一个很有用的类型 Buffer:
+```go
+import "bytes"
+
+type Buffer struct{
+	...
+}
+```
 
 
 
