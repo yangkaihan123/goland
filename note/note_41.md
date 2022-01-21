@@ -54,10 +54,24 @@
     切片y[0:4] 由元素 3，5，7，11组成
 如图：[slice_in_mem.png](E:\go_note\pic\note_41\slice_in_mem.png)  
 例程 [array_slices_test.go](E:\go_note\study_source\slice\array_slices_test.go)
+        
+    output:
+    Slice at 0 is 2  
+    Slice at 1 is 3  
+    Slice at 2 is 4  
+    The length of arr1 is 6  
+    The length of slice1 is 3  
+    The capacity of slice1 is 4  
+    Slice at 0 is 2  
+    Slice at 1 is 3  
+    Slice at 2 is 4  
+    Slice at 3 is 5  
+    The length of slice1 is 4  
+    The capacity of slice1 is 4  
 
-
-
-
+    关于切片的容量和长度：
+    切片的长度就是它所包含的元素个数。
+    切片的容量是从它的第一个元素开始数，到其相关数组元素末尾的个数。
 
 
 
