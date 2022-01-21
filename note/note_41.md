@@ -52,8 +52,8 @@
     长度为2 容量为4的切片y:
     y[0] = 3 且 y[1] = 5
     切片y[0:4] 由元素 3，5，7，11组成
-如图：[slice_in_mem.png](E:\go_note\pic\note_41\slice_in_mem.png)  
-例程 [array_slices_test.go](E:\go_note\study_source\slice\array_slices_test.go)
+如图：[slice_in_mem.png](pic/note_41/slice_in_mem.png)  
+例程 [array_slices_test.go](study_source/slice/array_slices_test.go)
         
     output:
     Slice at 0 is 2  
@@ -68,12 +68,44 @@
     Slice at 3 is 5  
     The length of slice1 is 4  
     The capacity of slice1 is 4  
+    如果 s2 是一个 slice，你可以将 s2 向后移动一位 s2 = s2[1:]，但是末尾没有移动。切片只能向后移动，s2 = s2[-1:] 会导致编译错误。切片不能被重新分片以获取数组的前一个元素。
+    注意 绝对不要用指针指向 slice。切片本身已经是一个引用类型，所以它本身就是一个指针！！
 
     关于切片的容量和长度：
     切片的长度就是它所包含的元素个数。
     切片的容量是从它的第一个元素开始数，到其相关数组元素末尾的个数。
 
-
+###将切片传递给函数
+如果一个函数需要对数组做操作，最通常的做法是把参数声明为切片，当调用该函数时，把数组分片，创建为一个切片引用并传递给该函数：          
+计算数组元素和的方法：  
+```go
+package main
+func sum(a []int) int {
+	s := 0
+	for i := 0; i < len(a); i++ {
+		s += a[i]
+    }
+	return s
+}
+func main()  {
+    var arr = [5]int{0,1,2,3,4}
+	sum(arr[:])
+}
+```   
+###用make()创建一个切片
+当相关数组还没有定义时，可以使用make()函数来创建一个切片，同时也创建好了相关数组：  
+    
+    var slice1 []type = make([]type, len)  
+也可以简写为 slice1 := make([]type, len) ,这里len是数组的长度也是slice的初始长度  
+所以定义 s2 := make([]int 10) 那么 cap(s2) == len(s2) == 10  
+make 函数接受两个参数：元素的类型以及切片元素的个数  
+如果创建一个slice1，他不占用整个数组，而是只占以len 为个数个项，那么只要：   
+slice1 := make([]type, int, cap)   
+make 的使用方式是：func make([]T, len, cap) 其中cap是可选参数   
+所以下面两种方式都可以生成切片：      
+make([]int, 50, 100)  
+new([100]int)[0:50]  
+下图是make方法生成的切片的内存结构：![](pic/note_41/make_slice.png?raw=true)
 
 
 
