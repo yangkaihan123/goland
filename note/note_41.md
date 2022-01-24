@@ -197,11 +197,86 @@ import "bytes"
 type Buffer struct{
 	...
 }
-```
+```   
+这是一个长度可以变的 bytes 的 buffer , 提供 Read 和 Write 方法，因为读写长度未知的 bytes 最好用 buffer。  
 
+Buffer 也可以这样定义：`var buffer bytes.Buffer`。  
+或者使用 new 获得一个指针：`var r *bytes.Buffer = new(bytes.Buffer)`    
+或者通过函数：`func NewBuffer(buf []byte) *Buffer`, 创建一个Buffer对象并且使用 buf 初始化好，NewBuffer 最好用在从 buf 读取的时候使用。   
 
+**通过buffer串联字符串**  
+类似Java的StringBuilder类。   
+例程中，创建一个buffer，通过 `buffer.WriteString(s)` 方法将字符串 s 追加到后面，最后再通过 `buffer.String()` 方法转换成 string：   
+```go
+var buffer bytes.Buffer
+for {
+	if s, ok := getNextString(); ok {
+		//method getNextString() not shown here
+		buffer.WriteString(s)
+    }else{
+	    break	
+    }
+}
+fmt.Print(buffer.String(),"\n")
+```   
+这种实现方式比使用 `+=` 要更节省内存和CPU，尤其要串联字符串的数目特别多的时候。  
 
+**练习**：给定切片 sl，将一个 []byte 数组追加到 sl 后面。写一个函数 Append(slice, data []byte) []byte，该函数在 sl 不能存储更多数据的时候自动扩容。   
+例程：[](study_source/slice_02/bytes_01_test.go)   
+**练习**：把一个缓存 buf 分片成两个切片：第一个是前 n 个bytes，后一个是剩余的    
 
+##for-range结构
+
+这种构建方法可以用于数组和切片   
+```go
+for ix, value := range slice1 {
+	...
+}
+```   
+第一个返回值 ix 是数组或者切片的索引，第二个是在该索引位置的值，都是仅在 for 循环内部可见的局部变量。  
+value 只是 slice1 某个索引位置的值的一个拷贝，不能用来修改 slice1 该索引位置的值。   
+例程：[slice_forrange_test.go](study_source/slice_02/slice_forrange_test.go)    
+例程2：[slice_forrange2_test.go](study_source/slice_02/slice_forrange2_test.go)   
+slice_forrange2_test.go 给出了一个关于字符串的例子，`_` 可以用于忽略索引。   
+如果只需要索引，可以忽略第二个变量：  
+```go
+for ix := range seasons {
+	fmt.Printf("%d",ix)
+}
+//output: 0 1 2 3
+```    
+如果需要修改 `seasons[ix]`的值可以使用这个版本。    
+
+**多维切片下的 for-range:**  
+
+通过计算行数和矩阵值可以方便的写出：   
+```go
+for row := range screen {
+	for column := range screen[row] {
+		screen[row][column] = 1
+    }   
+}
+```    
+**问题：** 假设现在如下数组：`items := [...]int{10, 20, 30, 40, 50}`    
+a) 如果写了下面这个for，那么执行for循环后的`items`的值是多少：   
+```go
+for _, item := range items {
+	item *= 2
+}
+```   
+b) 如果a)无法正常工作，写一个for循环让值可以double    
+例程：[for_range_test.go](study_source/slice_02/for_range_test.go)   
+
+**练习**  :
+a) 写一个 Sum 函数，传入参数为一个 32 位 float 数组成的数组 arrF，返回该数组的所有数字和。
+
+如果把数组修改为切片的话代码要做怎样的修改？如果用切片形式方法实现不同长度数组的的和呢？
+
+b) 写一个 SumAndAverage 方法，返回两个 int 和 float32 类型的未命名变量的和与平均值。   
+程序：[sum_array_test.go](study_source/slice_02/sum_array_test.go)    
+
+**练习二**： 写一个minSlice方法，传入一个int的切片并且返回最小值，再写一个maxSlice方法返回最大值   
+程序：[min_max_test.go](study_source/slice_02/min_max_test.go)
 
 
 
