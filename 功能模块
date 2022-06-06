@@ -1,0 +1,23 @@
+用户管理：用户数据
+鉴权认证：post token 返回认证信息
+
+用户表
+CREATE TABLE `user`
+(
+    `id`                 bigint(20) NOT NULL AUTO_INCREMENT,
+    `username`           varchar(32)         DEFAULT NULL,
+    `email`              varchar(128)        DEFAULT NULL,
+    `password`           varchar(512)        DEFAULT NULL,
+    `description`        text,
+    `status`             bigint(20) NOT NULL,
+    `roles`              text,
+    `type`               bigint(20) NOT NULL,
+    `create_time`        bigint(20)          DEFAULT NULL,
+    `update_time`        bigint(20)          DEFAULT NULL,
+    PRIMARY KEY (`id`),
+    UNIQUE KEY `username` (`username`),
+    UNIQUE KEY `email` (`email`),
+    KEY `idx_user_score` (`score`),
+    KEY `idx_user_status` (`status`)
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4;
