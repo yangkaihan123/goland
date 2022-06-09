@@ -5,7 +5,9 @@ import "fmt"
 func main() {
 	a := "11"
 	b := "1"
-	fmt.Println("sum= ", addBinary(a, b))
+	c := addBinary(a, b)
+	fmt.Println("sum= ", c)
+	fmt.Println()
 }
 func addBinary(a string, b string) string {
 	for len(a) > len(b) {
