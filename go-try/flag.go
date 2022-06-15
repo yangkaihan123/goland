@@ -5,10 +5,10 @@ import (
 	"fmt"
 )
 
-var name string
+var na string
 
 func init() {
-	flag.StringVar(&name, "name", "everyone", "The greeting object")
+	flag.StringVar(&na, "name", "everyone", "The greeting object")
 	/*
 		函数 flag.StringVar 接受四个参数
 		第一个参数是用于存储该命令参数的地址，具体到这里就是前面声明的变量name的地址（内存里的位置），由表达式&name表示
@@ -32,5 +32,5 @@ func main() {
 		所以给命令参数赋值的操作放在了init里
 		先定义和赋值变量，再放入flag.Parse()
 	*/
-	fmt.Printf("Hello, %s!\n", name)
+	fmt.Printf("Hello, %s!\n", na)
 }
