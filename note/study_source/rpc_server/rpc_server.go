@@ -1,6 +1,3 @@
-// rpc_server.go
-//  原文注释已经被删除，因为和此代码没有关系，个人猜测是作者在这个示例修改之前的代码。
-
 package main
 
 import (

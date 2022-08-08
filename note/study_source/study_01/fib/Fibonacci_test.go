@@ -16,11 +16,12 @@ func TestFibonacci(t *testing.T) {
 	a := 1
 	b := 2
 	t.Log(a)
-	for i := 0; i < 5; i++ {
+	for i := 0; i < 100; i++ {
 		t.Log(" ", b)
 		tmp := a
 		a = b
 		b = tmp + a
+		t.Log(i)
 	}
 }
 

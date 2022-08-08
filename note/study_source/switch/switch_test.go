@@ -27,7 +27,7 @@ func TestSwitch2(t *testing.T) {
 }
 
 func TestSeason(t *testing.T) {
-	var a int = 2
+	var a int = 100
 	switch {
 	case a >= 1 && a <= 3:
 		t.Log("the season is spring")
@@ -35,7 +35,7 @@ func TestSeason(t *testing.T) {
 		t.Log("the season is summer")
 	case a >= 7 && a <= 9:
 		t.Log("the season is autumn")
-	case a >= 10 && a >= 12:
+	case a >= 10 && a <= 12:
 		t.Log("the season is winter")
 	default:
 		t.Log("no season")
